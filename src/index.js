@@ -6,7 +6,7 @@ import morgan from "morgan";
 import dotenv from "dotenv";
 dotenv.config();
 
-const port = process.env.APP_PORT;
+const port = process.env.APP_PORT || 3000;
 
 app.use(express.json());
 app.use(morgan("dev"));
