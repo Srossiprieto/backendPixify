@@ -1,4 +1,4 @@
-import User from '../models/users.js';
+import User from "../models/users.js";
 
 // Obtener todos los usuarios
 export const getUsers = async (req, res) => {
@@ -15,8 +15,7 @@ export const getUserById = async (req, res) => {
   const { id } = req.params;
   try {
     const user = await User.findById(id);
-    if (!user)
-      return res.status(404).json({ message: "User not found" });
+    if (!user) return res.status(404).json({ message: "User not found" });
     res.json(user);
   } catch (err) {
     return res.status(500).json({ message: "Internal server error" });
@@ -25,15 +24,15 @@ export const getUserById = async (req, res) => {
 
 export const createUser = async (req, res) => {
   try {
-    const { username, email, password_hash } = req.body;
+    const { username, email, phone, password_hash } = req.body;
 
-    const user = new User({ username, email, password_hash });
+    const user = new User({ username, email, phone, password_hash });
 
     await user.save();
 
     res.status(201).json({
       message: "User created successfully",
-      user
+      user,
     });
     console.log("User created successfully");
   } catch (error) {
@@ -48,11 +47,10 @@ export const updateUser = async (req, res) => {
 
   try {
     const user = await User.findByIdAndUpdate(id, userData, { new: true });
-    if (!user)
-      return res.status(404).json({ message: "User not found" });
+    if (!user) return res.status(404).json({ message: "User not found" });
     res.json({
       message: "User updated successfully",
-      user
+      user,
     });
     console.log("User updated successfully");
   } catch (err) {
@@ -65,12 +63,15 @@ export const deleteUser = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const user = await User.findByIdAndUpdate(id, { state: false }, { new: true });
-    if (!user)
-      return res.status(404).json({ message: "User not found" });
+    const user = await User.findByIdAndUpdate(
+      id,
+      { state: false },
+      { new: true }
+    );
+    if (!user) return res.status(404).json({ message: "User not found" });
     res.json({
       message: "User deleted successfully",
-      user
+      user,
     });
     console.log("User deleted successfully");
   } catch (err) {
