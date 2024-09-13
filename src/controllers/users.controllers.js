@@ -58,23 +58,32 @@ export const updateUser = async (req, res) => {
   }
 };
 
-// Eliminar (desactivar) un usuario
 export const deleteUser = async (req, res) => {
-  const { id } = req.params;
+  const { _id } = req.params;
 
   try {
+   
+    if (!_id) {
+      return res.status(400).json({ message: "User ID is required" });
+    }
+
     const user = await User.findByIdAndUpdate(
-      id,
+      _id,
       { state: false },
       { new: true }
     );
-    if (!user) return res.status(404).json({ message: "User not found" });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
     res.json({
       message: "User deleted successfully",
       user,
     });
     console.log("User deleted successfully");
   } catch (err) {
+    console.error(err);
     return res.status(500).json({ message: "Internal server error" });
   }
 };
